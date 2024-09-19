@@ -4,9 +4,7 @@
 # In[1]:
 
 
-get_ipython().system('pip install matplotlib.font_manager')
-get_ipython().system('pip install os')
-get_ipython().system('pip install pathlib')
+
 
 
 # In[2]:
