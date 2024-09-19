@@ -31,6 +31,7 @@ def set_korean_font():
 # 폰트 설정 호출
 set_korean_font()
 
+fm._rebuild()
 
 def load_data(file_path):
     df = pd.read_excel(file_path)
