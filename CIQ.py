@@ -13,8 +13,8 @@ def load_data(file_path):
     df = pd.read_excel(file_path)
 
     # 결측치 처리: 불량 부품 열의 결측치를 '제안'으로 대체
-    if '불량 부품' in df.columns:
-        df['불량 부품'] = df['불량 부품'].fillna('제안')
+    if '구분2' in df.columns:
+        df['구분2'] = df['구분2'].fillna('제안')
     
     return df
 
@@ -29,10 +29,10 @@ def visualize_data(df):
 
     # 불량 부품 별 상위 10개 항목 분포 (barplot으로 시각화)
     st.subheader("불량 부품 별 상위 10개 항목 분포")
-    top_10_parts = df['불량 부품'].value_counts().nlargest(10).index
-    filtered_df = df[df['불량 부품'].isin(top_10_parts)]
+    top_10_parts = df['구분2'].value_counts().nlargest(10).index
+    filtered_df = df[df['구분2'].isin(top_10_parts)]
     fig, ax = plt.subplots()
-    sns.countplot(data=filtered_df, x='불량 부품', order=top_10_parts, ax=ax)
+    sns.countplot(data=filtered_df, x='구분2', order=top_10_parts, ax=ax)
     ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
     st.pyplot(fig)
 
