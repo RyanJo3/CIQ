@@ -9,10 +9,6 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import streamlit as st
 
-
-# In[5]:
-
-
 def load_data(file_path):
     df = pd.read_excel(file_path)
 
@@ -21,10 +17,6 @@ def load_data(file_path):
         df['불량 부품'] = df['불량 부품'].fillna('제안')
     
     return df
-
-
-# In[6]:
-
 
 def visualize_data(df):
     st.title("CIQ 데이터 시각화 대시보드")
@@ -35,27 +27,28 @@ def visualize_data(df):
     sns.violinplot(data=df, x='발생월', y='보고 구분', inner="quartile", ax=ax)
     st.pyplot(fig)
 
-    # 불량 부품 별 분포 (catplot으로 시각화)
-    st.subheader("불량 부품 별 분포")
-    fig = sns.catplot(data=df, x='구분2', kind="count", height=5, aspect=2)
-    st.pyplot(fig)
-
-    # 불량 유형 별 제품군 분포 (pointplot으로 시각화)
-    st.subheader("불량 유형 별 제품군 분포")
+    # 불량 부품 별 상위 10개 항목 분포 (barplot으로 시각화)
+    st.subheader("불량 부품 별 상위 10개 항목 분포")
+    top_10_parts = df['불량 부품'].value_counts().nlargest(10).index
+    filtered_df = df[df['불량 부품'].isin(top_10_parts)]
     fig, ax = plt.subplots()
-    sns.pointplot(data=df, x='보고 구분', y='E:P', ax=ax)
+    sns.countplot(data=filtered_df, x='불량 부품', order=top_10_parts, ax=ax)
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
     st.pyplot(fig)
 
-    # 담당팀 별 불량 유형 (heatmap으로 시각화)
-    st.subheader("담당팀 별 불량 유형 분포 (Heatmap)")
-    pivot_table = pd.crosstab(df['담당팀'], df['보고 구분'])
+    # 불량 유형 별 제품군 분포 (heatmap으로 시각화)
+    st.subheader("불량 유형 별 제품군 분포")
+    pivot_table = pd.crosstab(df['보고 구분'], df['E:P'])
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.heatmap(pivot_table, annot=True, fmt="d", cmap="Blues", ax=ax)
     st.pyplot(fig)
 
-
-# In[7]:
-
+    # 담당팀 별 불량 유형 (heatmap으로 시각화)
+    st.subheader("담당팀 별 불량 유형 분포 (Heatmap)")
+    pivot_table_team = pd.crosstab(df['담당팀'], df['보고 구분'])
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.heatmap(pivot_table_team, annot=True, fmt="d", cmap="Blues", ax=ax)
+    st.pyplot(fig)
 
 def main():
     st.sidebar.title("엑셀 파일 업로드")
@@ -70,4 +63,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
