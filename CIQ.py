@@ -8,6 +8,14 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import streamlit as st
+import matplotlib.font_manager as fm
+
+def set_korean_font():
+    plt.rcParams['font.family'] = 'NanumGothic'  # 나눔고딕 폰트 사용
+    plt.rcParams['axes.unicode_minus'] = False   # 마이너스 기호 깨짐 방지
+
+# 폰트 설정 호출
+set_korean_font()
 
 def load_data(file_path):
     df = pd.read_excel(file_path)
@@ -21,34 +29,58 @@ def load_data(file_path):
 def visualize_data(df):
     st.title("CIQ 데이터 시각화 대시보드")
 
-    # 발생월 별 불량 유형 분포 (violinplot으로 시각화)
-    st.subheader("발생월 별 불량 유형 분포")
-    fig, ax = plt.subplots()
-    sns.violinplot(data=df, x='발생월', y='보고 구분', inner="quartile", ax=ax)
-    st.pyplot(fig)
+    col1,col2 =st.columns(2)
+    
+     # 첫 번째 그래프: 발생월 별 불량 유형 분포 (boxplot)
+    with col1:
+        st.subheader("발생월 별 불량 유형 분포 (Boxplot)")
+        fig, ax = plt.subplots(figsize=(10, 5))
+        sns.boxplot(data=df, x='발생월', y='보고 구분', palette='Set3', ax=ax)
+        ax.set_title('발생월 별 불량 유형 분포', fontsize=16)
+        ax.set_xlabel('발생월', fontsize=14)
+        ax.set_ylabel('보고 구분', fontsize=14)
+        st.pyplot(fig)
 
-    # 불량 부품 별 상위 10개 항목 분포 (barplot으로 시각화)
-    st.subheader("불량 부품 별 상위 10개 항목 분포")
-    top_10_parts = df['구분2'].value_counts().nlargest(10).index
-    filtered_df = df[df['구분2'].isin(top_10_parts)]
-    fig, ax = plt.subplots()
-    sns.countplot(data=filtered_df, x='구분2', order=top_10_parts, ax=ax)
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
-    st.pyplot(fig)
+    # 두 번째 그래프: 불량 부품 별 상위 10개 항목 분포 (barplot)
+    with col2:
+        st.subheader("불량 부품 별 상위 10개 항목 분포 (Barplot)")
+        top_10_parts = df['불량 부품'].value_counts().nlargest(10).index
+        filtered_df = df[df['불량 부품'].isin(top_10_parts)]
+        fig, ax = plt.subplots(figsize=(10, 5))
+        sns.barplot(data=filtered_df, x='불량 부품', y='불량 부품', estimator=lambda x: len(x) / len(filtered_df) * 100, palette='coolwarm', order=top_10_parts, ax=ax)
+        ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
+        ax.set_title('불량 부품 별 상위 10개 항목 분포', fontsize=16)
+        ax.set_xlabel('불량 부품', fontsize=14)
+        ax.set_ylabel('비율 (%)', fontsize=14)
+        st.pyplot(fig)
 
-    # 불량 유형 별 제품군 분포 (heatmap으로 시각화)
-    st.subheader("불량 유형 별 제품군 분포")
-    pivot_table = pd.crosstab(df['보고 구분'], df['E:P'])
-    fig, ax = plt.subplots(figsize=(10, 6))
-    sns.heatmap(pivot_table, annot=True, fmt="d", cmap="Blues", ax=ax)
-    st.pyplot(fig)
+    # 세 번째 줄: 불량 유형 별 제품군 분포 (heatmap)
+    with st.container():
+        st.subheader("불량 유형 별 제품군 분포 (Heatmap)")
+        if '보고 구분' in df.columns and 'E:P' in df.columns:
+            pivot_table = pd.crosstab(df['보고 구분'], df['E:P'])
+            fig, ax = plt.subplots(figsize=(12, 6))
+            sns.heatmap(pivot_table, annot=True, fmt="d", cmap="YlGnBu", linewidths=.5, ax=ax)
+            ax.set_title('불량 유형 별 제품군 분포', fontsize=16)
+            ax.set_xlabel('E:P', fontsize=14)
+            ax.set_ylabel('보고 구분', fontsize=14)
+            st.pyplot(fig)
+        else:
+            st.write("열 '보고 구분' 또는 'E:P'이 데이터에 없습니다.")
 
-    # 담당팀 별 불량 유형 (heatmap으로 시각화)
-    st.subheader("담당팀 별 불량 유형 분포 (Heatmap)")
-    pivot_table_team = pd.crosstab(df['담당팀'], df['보고 구분'])
-    fig, ax = plt.subplots(figsize=(10, 6))
-    sns.heatmap(pivot_table_team, annot=True, fmt="d", cmap="Blues", ax=ax)
-    st.pyplot(fig)
+    # 네 번째 줄: 담당팀 별 불량 유형 (heatmap)
+    with st.container():
+        st.subheader("담당팀 별 불량 유형 분포 (Heatmap)")
+        if '담당팀' in df.columns and '보고 구분' in df.columns:
+            pivot_table_team = pd.crosstab(df['담당팀'], df['보고 구분'])
+            fig, ax = plt.subplots(figsize=(12, 6))
+            sns.heatmap(pivot_table_team, annot=True, fmt="d", cmap="YlOrBr", linewidths=.5, ax=ax)
+            ax.set_title('담당팀 별 불량 유형 분포', fontsize=16)
+            ax.set_xlabel('보고 구분', fontsize=14)
+            ax.set_ylabel('담당팀', fontsize=14)
+            st.pyplot(fig)
+        else:
+            st.write("열 '담당팀' 또는 '보고 구분'이 데이터에 없습니다.")
 
 def main():
     st.sidebar.title("엑셀 파일 업로드")
