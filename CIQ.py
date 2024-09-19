@@ -9,13 +9,28 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import streamlit as st
 import matplotlib.font_manager as fm
+import os
 
 def set_korean_font():
-    plt.rcParams['font.family'] = 'NanumGothic'  # 나눔고딕 폰트 사용
-    plt.rcParams['axes.unicode_minus'] = False   # 마이너스 기호 깨짐 방지
+    # 리포지토리 최상위 경로에 있는 폰트 파일 이름 지정
+    font_path = 'NanumGothic.ttf'  # NanumGothic.ttf 파일 이름
+    
+    # 폰트 파일이 존재하는지 확인하고 설정
+    if os.path.exists(font_path):
+        font_properties = fm.FontProperties(fname=font_path)
+        plt.rcParams['font.family'] = font_properties.get_name()  # matplotlib에 등록된 폰트 이름 사용
+        print(f"'{font_properties.get_name()}' 폰트가 성공적으로 설정되었습니다.")
+    else:
+        # 폰트 파일이 존재하지 않으면 기본 폰트로 설정
+        plt.rcParams['font.family'] = 'Arial'
+        print("폰트 파일을 찾을 수 없습니다. 기본 폰트로 설정합니다.")
+
+    # 마이너스 기호 깨짐 방지 설정
+    plt.rcParams['axes.unicode_minus'] = False
 
 # 폰트 설정 호출
 set_korean_font()
+
 
 def load_data(file_path):
     df = pd.read_excel(file_path)
