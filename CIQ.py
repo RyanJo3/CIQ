@@ -63,7 +63,7 @@ def visualize_data(df):
         top_10_parts = df['구분2'].value_counts().nlargest(10).index
         filtered_df = df[df['구분2'].isin(top_10_parts)]
         fig, ax = plt.subplots(figsize=(10, 5))
-        sns.barplot(data=filtered_df, x='구분2', y='구분2', estimator=lambda x: len(x) / len(filtered_df) * 100, palette='coolwarm', order=top_10_parts, ax=ax)
+        sns.barplot(data=filtered_df, x='구분2', y='발생월', estimator=lambda x: len(x) / len(filtered_df) * 100, palette='coolwarm', order=top_10_parts, ax=ax)
         ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
         ax.set_title('불량 부품 별 상위 10개 항목 분포', fontsize=16)
         ax.set_xlabel('불량 부품', fontsize=14)
