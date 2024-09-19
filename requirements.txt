@@ -3,5 +3,4 @@ seaborn
 matplotlib
 streamlit
 openpyxl
-matplotlib.font_manager
-os
+pathlib
