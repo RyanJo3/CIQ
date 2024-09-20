@@ -121,7 +121,7 @@ def visualize_data(df):
 
 def main():
     st.sidebar.title("엑셀 파일 자동 로드")
-    file_path = "D:/your_folder_path/your_file.xlsx"  # D 드라이브의 특정 경로에 있는 엑셀 파일 경로
+    file_path = "D:/DX LV2/CIQDASHBOARD.xlsx"  # D 드라이브의 특정 경로에 있는 엑셀 파일 경로
 
     if os.path.exists(file_path):
         df = load_data(file_path)
