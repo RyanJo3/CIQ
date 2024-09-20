@@ -6,20 +6,19 @@ import matplotlib.font_manager as fm
 import os
 
 
+st.set_page_config(page_title="CIQ Dashboard", layout="wide")
+
+# 추가한 한글 폰트 적용을 위한 스타일 지정
 st.markdown(
-        """
-        <style>
-        @font-face {
-            font-family: 'NanumGothic';
-            src: url('NanumGothic.ttf') format('truetype');
-        }
-        html, body, [class*="css"]  {
-            font-family: 'NanumGothic';
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+    """
+    <style>
+    * {
+        font-family: 'NanumGothic';
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 def set_korean_font():
     font_path = 'NanumGothic.ttf'  # NanumGothic.ttf 파일 이름
