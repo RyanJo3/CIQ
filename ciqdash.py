@@ -5,6 +5,22 @@ import streamlit as st
 import matplotlib.font_manager as fm
 import os
 
+
+st.markdown(
+        """
+        <style>
+        @font-face {
+            font-family: 'NanumGothic';
+            src: url('NanumGothic.ttf') format('truetype');
+        }
+        html, body, [class*="css"]  {
+            font-family: 'NanumGothic';
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
 def set_korean_font():
     font_path = 'NanumGothic.ttf'  # NanumGothic.ttf 파일 이름
     
@@ -89,20 +105,7 @@ def visualize_data(df):
 def main():
     # CSV 파일 경로 설정
     file_path = 'dashboard.csv'  # 예시: 'data.csv'
-    st.markdown(
-        """
-        <style>
-        @font-face {
-            font-family: 'NanumGothic';
-            src: url('NanumGothic.ttf') format('truetype');
-        }
-        html, body, [class*="css"]  {
-            font-family: 'NanumGothic';
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+    
     
     # CSV 파일에서 데이터 로드
     df = load_data(file_path)
