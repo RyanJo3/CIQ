@@ -20,20 +20,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-def set_korean_font():
-    font_path = 'NanumGothic.ttf'  # NanumGothic.ttf 파일 이름
-    
-    if os.path.exists(font_path):
-        font_properties = fm.FontProperties(fname=font_path)
-        plt.rcParams['font.family'] = font_properties.get_name()
-        print(f"'{font_properties.get_name()}' 폰트가 성공적으로 설정되었습니다.")
-    else:
-        plt.rcParams['font.family'] = 'Arial'
-        print("폰트 파일을 찾을 수 없습니다. 기본 폰트로 설정합니다.")
-    
-    plt.rcParams['axes.unicode_minus'] = False
 
-set_korean_font()
 
 def load_data(file_path):
     # CSV 파일을 로드하여 데이터프레임으로 변환
