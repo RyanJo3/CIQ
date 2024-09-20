@@ -94,7 +94,7 @@ def main():
         <style>
         @font-face {
             font-family: 'NanumGothic';
-            src: url('https://github.com/RyanJo3/CIQ/blob/main/NanumGothic.ttf') format('truetype');
+            src: url('NanumGothic.ttf') format('truetype');
         }
         html, body, [class*="css"]  {
             font-family: 'NanumGothic';
