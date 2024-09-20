@@ -119,17 +119,11 @@ def visualize_data(df):
 # In[5]:
 
 
-def get_latest_file(folder_path):
+def get_all_excel_files(folder_path):
     folder = Path(folder_path)
-    files = list(folder.glob('*.xlsx'))
-    print(f"Found files: {files}")  # Debugging message
+    files = list(folder.glob('*.xlsx'))  # .xlsx 파일만 찾기
+    st.write(f"Found files: {files}")  # 디버깅 메시지
     return files
-    if not files:
-        return None
-    latest_file = max(files, key=os.path.getctime)
-    print(f"Latest file: {latest_file}")  # Debugging message
-    return latest_file
-
 
 # In[6]:
 
