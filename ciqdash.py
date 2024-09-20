@@ -88,7 +88,7 @@ def visualize_data(df):
 
 def main():
     # CSV 파일 경로 설정
-    file_path = 'data.csv'  # 예시: 'data.csv'
+    file_path = 'dashboard.csv'  # 예시: 'data.csv'
     
     # CSV 파일에서 데이터 로드
     df = load_data(file_path)
