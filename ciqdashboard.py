@@ -123,12 +123,12 @@ def get_latest_file(folder_path):
     folder = Path(folder_path)
     files = list(folder.glob('*.xlsx'))
     print(f"Found files: {files}")  # Debugging message
-    
+    return files
     if not files:
         return None
     latest_file = max(files, key=os.path.getctime)
     print(f"Latest file: {latest_file}")  # Debugging message
-    return files
+    return latest_file
 
 
 # In[6]:
