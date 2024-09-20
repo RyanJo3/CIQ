@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+
+
+
+
+
+
 # In[1]:
-
-
-
-
-
-# In[2]:
 
 
 import pandas as pd
@@ -19,7 +19,7 @@ import os
 from pathlib import Path
 
 
-# In[3]:
+# In[2]:
 
 
 def set_korean_font():
@@ -43,7 +43,7 @@ def set_korean_font():
 set_korean_font()
 
 
-# In[4]:
+# In[3]:
 
 
 def load_data(file_path):
@@ -56,7 +56,7 @@ def load_data(file_path):
     return df
 
 
-# In[5]:
+# In[4]:
 
 
 def visualize_data(df):
@@ -116,24 +116,26 @@ def visualize_data(df):
             st.write("열 '담당팀' 또는 '보고 구분'이 데이터에 없습니다.")
 
 
-# In[6]:
+# In[5]:
 
 
 def get_latest_file(folder_path):
     folder = Path(folder_path)
     files = list(folder.glob('*.xlsx'))
+    print(f"Found files: {files}")  # Debugging message
     if not files:
         return None
     latest_file = max(files, key=os.path.getctime)
+    print(f"Latest file: {latest_file}")  # Debugging message
     return latest_file
 
 
-# In[7]:
+# In[6]:
 
 
 def main():
     st.sidebar.title("엑셀 파일 자동 로드")
-    folder_path = st.sidebar.text_input("폴더 경로를 입력하세요", value=r"D:\DX LV2")
+    folder_path = st.sidebar.text_input("폴더 경로를 입력하세요", value="data")
 
     if folder_path:
         latest_file = get_latest_file(folder_path)
@@ -147,14 +149,14 @@ def main():
         st.write("폴더 경로를 입력하세요.")
 
 
-# In[8]:
+# In[7]:
 
 
 if __name__ == '__main__':
     main()
 
 
-# In[ ]:
+
 
 
 
