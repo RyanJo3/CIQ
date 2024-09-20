@@ -31,7 +31,7 @@ def set_korean_font():
 set_korean_font()
 
 # 엑셀 파일 경로 지정
-file_path = "D:/your_folder_path/your_file.xlsx"
+file_path = "D:\\DX LV2\\CIQDASHBOARD.xlsx"
 
 # 데이터 불러오기
 def load_data(file_path):
