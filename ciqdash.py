@@ -20,7 +20,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-
+plt.rcParams['font.family'] = 'NanumGothic'
 
 def load_data(file_path):
     # CSV 파일을 로드하여 데이터프레임으로 변환
