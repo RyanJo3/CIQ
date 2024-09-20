@@ -11,17 +11,7 @@ font_prop = fm.FontProperties(fname=font_path)
 
 st.set_page_config(page_title="CIQ Dashboard", layout="wide")
 
-# 추가한 한글 폰트 적용을 위한 스타일 지정
-st.markdown(
-    """
-    <style>
-    * {
-        font-family: 'NanumGothic', sans-serif;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+
 
 # Matplotlib 폰트 설정
 plt.rc('font', family='NanumGothic')
