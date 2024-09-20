@@ -5,16 +5,6 @@ import streamlit as st
 import matplotlib.font_manager as fm
 import os
 
-# 한글 폰트 경로 설정
-font_path = 'NanumGothic.ttf'  # 실제 폰트 파일 경로로 수정
-font_prop = fm.FontProperties(fname=font_path)
-
-st.set_page_config(page_title="CIQ Dashboard", layout="wide")
-
-
-
-# Matplotlib 폰트 설정
-plt.rc('font', family='NanumGothic')
 
 def load_data(file_path):
     df = pd.read_csv(file_path)
