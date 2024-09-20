@@ -48,24 +48,41 @@ def visualize_data(df):
 
     with col2:
         st.subheader("불량 부품 별 상위 10개 항목 분포 (Lineplot)")
-        
+    
         # 상위 10개 부품 선택
         top_10_parts = df['구분2'].value_counts().nlargest(10).index
         filtered_df = df[df['구분2'].isin(top_10_parts)]
-        
+    
+        # '발생월'에서 '월' 문자열 제거 후 숫자형으로 변환
+        filtered_df['발생월'] = filtered_df['발생월'].str.replace('월', '').astype(int)
+    
         # 발생월과 구분2로 그룹화하여 건수 계산
         count_df = filtered_df.groupby(['발생월', '구분2']).size().reset_index(name='Count')
     
-        fig, ax = plt.subplots(figsize=(10, 5))
-        
-        # 발생월을 x축으로, 각 구분2에 대해 라인 플롯 그리기
-        sns.lineplot(data=count_df, x='발생월', y='Count', hue='구분2', marker='o', ax=ax)
-        
-        ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right', fontproperties=font_prop)
-        ax.set_title('불량 부품 별 상위 10개 항목 월별 건수 분포', fontsize=16, fontproperties=font_prop)
-        ax.set_xlabel('발생월', fontsize=14, fontproperties=font_prop)
-        ax.set_ylabel('건수', fontsize=14, fontproperties=font_prop)
-        st.pyplot(fig)
+        # 발생월과 구분2의 결측치 확인
+        if count_df.empty:
+            st.warning("데이터가 없습니다. 상위 10개 부품의 건수가 없거나 발생월 정보가 부족합니다.")
+        else:
+            fig, ax = plt.subplots(figsize=(10, 5))
+    
+            # 발생월을 x축으로, 각 구분2에 대해 라인 플롯 그리기
+            sns.lineplot(data=count_df, x='발생월', y='Count', hue='구분2', marker='o', ax=ax)
+    
+            # 각 포인트에 월 레이블 추가
+            for i in range(len(count_df)):
+                ax.text(count_df['발생월'].iloc[i], count_df['Count'].iloc[i], 
+                        count_df['발생월'].iloc[i], 
+                        color='black', fontsize=10, 
+                        ha='center', va='bottom')
+    
+            ax.set_xticks(range(1, 13))  # x축을 1월~12월로 설정
+            ax.set_xticklabels(['1월', '2월', '3월', '4월', '5월', '6월', 
+                                '7월', '8월', '9월', '10월', '11월', '12월'], 
+                               rotation=45, ha='right', fontproperties=font_prop)
+            ax.set_title('불량 부품 별 상위 10개 항목 월별 건수 분포', fontsize=16, fontproperties=font_prop)
+            ax.set_xlabel('발생월', fontsize=14, fontproperties=font_prop)
+            ax.set_ylabel('건수', fontsize=14, fontproperties=font_prop)
+            st.pyplot(fig)
 
     with st.container():
         st.subheader("불량 유형 별 제품군 분포 (Heatmap)")
