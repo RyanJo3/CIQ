@@ -120,7 +120,7 @@ def visualize_data(df):
 
 
 def get_latest_file(folder_path):
-    folder = Path(folder_path)
+    folder = Path(folder_path).resolve()
     st.write(f"Current working directory: {os.getcwd()}")  # 현재 작업 디렉토리 출력
     st.write(f"Folder path: {folder_path}")  # 입력된 폴더 경로 출력
     files = list(folder.glob('*.xlsx'))
