@@ -119,32 +119,16 @@ def visualize_data(df):
 # In[5]:
 
 
-def get_latest_file(folder_path):
-    folder = Path(folder_path).resolve()
-    st.write(f"Current working directory: {os.getcwd()}")  # 현재 작업 디렉토리 출력
-    st.write(f"Folder path: {folder_path}")  # 입력된 폴더 경로 출력
-    files = list(folder.glob('*.xlsx'))
-    st.write(f"Found files: {files}")  # 디버깅 메시지
-    if not files:
-        return None
-    latest_file = max(files, key=os.path.getctime)
-    st.write(f"Latest file: {latest_file}")  # 디버깅 메시지
-    return latest_file
-
 def main():
     st.sidebar.title("엑셀 파일 자동 로드")
-    folder_path = st.sidebar.text_input("폴더 경로를 입력하세요")
+    file_path = "D:/your_folder_path/your_file.xlsx"  # D 드라이브의 특정 경로에 있는 엑셀 파일 경로
 
-    if folder_path:
-        latest_file = get_latest_file(folder_path)
-        if latest_file:
-            df = load_data(latest_file)
-            st.write("데이터 프레임 미리보기", df.head())
-            visualize_data(df)
-        else:
-            st.write("폴더에 엑셀 파일이 없습니다.")
+    if os.path.exists(file_path):
+        df = load_data(file_path)
+        st.write("데이터 프레임 미리보기", df.head())
+        visualize_data(df)
     else:
-        st.write("폴더 경로를 입력하세요.")
+        st.write("지정된 경로에 엑셀 파일이 없습니다.")
 
 if __name__ == '__main__':
     main()
