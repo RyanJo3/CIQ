@@ -56,42 +56,42 @@ def visualize_data(df):
         ax.set_ylabel('보고 구분', fontsize=14, fontproperties=font_prop)
         st.pyplot(fig)
 
-   with col2:
-       st.subheader("불량 부품 별 상위 10개 항목 분포 (Lineplot)")
-       top_10_parts = df['구분2'].value_counts().nlargest(10).index
-       filtered_df = df[df['구분2'].isin(top_10_parts)]
+    with col2:
+        st.subheader("불량 부품 별 상위 10개 항목 분포 (Lineplot)")
+        top_10_parts = df['구분2'].value_counts().nlargest(10).index
+        filtered_df = df[df['구분2'].isin(top_10_parts)]
     
-       if filtered_df.empty:
-           st.warning("상위 10개 부품 데이터가 없습니다.")
-           return
+        if filtered_df.empty:
+            st.warning("상위 10개 부품 데이터가 없습니다.")
+            return
     
-       filtered_df['발생월'] = filtered_df['발생월'].str.replace('월', '').astype(int)
-       count_df = filtered_df.groupby(['발생월', '구분2']).size().reset_index(name='Count')
+        filtered_df['발생월'] = filtered_df['발생월'].str.replace('월', '').astype(int)
+        count_df = filtered_df.groupby(['발생월', '구분2']).size().reset_index(name='Count')
     
-       if count_df.empty:
-           st.warning("건수 데이터가 없습니다.")
-           return
+        if count_df.empty:
+            st.warning("건수 데이터가 없습니다.")
+            return
 
-       fig, ax = plt.subplots(figsize=(10, 5))
+        fig, ax = plt.subplots(figsize=(10, 5))
     
-       # 발생월을 x축으로, 각 구분2에 대해 라인 플롯 그리기
-       sns.lineplot(data=count_df, x='발생월', y='Count', hue='발생월', style='구분2', markers=True, ax=ax)
+        # 발생월을 x축으로, 각 구분2에 대해 라인 플롯 그리기
+        sns.lineplot(data=count_df, x='발생월', y='Count', hue='발생월', style='구분2', markers=True, ax=ax)
 
-       # 각 포인트에 구분2의 건수 레이블 추가
-       for i in range(len(count_df)):
-           ax.text(count_df['발생월'].iloc[i], count_df['Count'].iloc[i], 
-                   f"{count_df['Count'].iloc[i]}", 
-                   color='black', fontsize=10, 
-                   ha='center', va='bottom')
+        # 각 포인트에 구분2의 건수 레이블 추가
+        for i in range(len(count_df)):
+            ax.text(count_df['발생월'].iloc[i], count_df['Count'].iloc[i], 
+                    f"{count_df['Count'].iloc[i]}", 
+                    color='black', fontsize=10, 
+                    ha='center', va='bottom')
 
-       ax.set_xticks(range(1, 13))
-       ax.set_xticklabels(['1월', '2월', '3월', '4월', '5월', '6월', 
-                           '7월', '8월', '9월', '10월', '11월', '12월'], 
-                          rotation=45, ha='right', fontproperties=font_prop)
-       ax.set_title('불량 부품 별 상위 10개 항목 월별 건수 분포', fontsize=16, fontproperties=font_prop)
-       ax.set_xlabel('발생월', fontsize=14, fontproperties=font_prop)
-       ax.set_ylabel('건수', fontsize=14, fontproperties=font_prop)
-       st.pyplot(fig)
+        ax.set_xticks(range(1, 13))
+        ax.set_xticklabels(['1월', '2월', '3월', '4월', '5월', '6월', 
+                            '7월', '8월', '9월', '10월', '11월', '12월'], 
+                           rotation=45, ha='right', fontproperties=font_prop)
+        ax.set_title('불량 부품 별 상위 10개 항목 월별 건수 분포', fontsize=16, fontproperties=font_prop)
+        ax.set_xlabel('발생월', fontsize=14, fontproperties=font_prop)
+        ax.set_ylabel('건수', fontsize=14, fontproperties=font_prop)
+        st.pyplot(fig)
 
 
     with st.container():
