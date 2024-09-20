@@ -133,7 +133,7 @@ def get_latest_file(folder_path):
 
 def main():
     st.sidebar.title("엑셀 파일 자동 로드")
-    folder_path = st.sidebar.text_input("폴더 경로를 입력하세요", value="data")
+    folder_path = st.sidebar.text_input("폴더 경로를 입력하세요", value=r"D:\DX LV2")
 
     if folder_path:
         latest_file = get_latest_file(folder_path)
