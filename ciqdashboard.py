@@ -121,9 +121,13 @@ def visualize_data(df):
 
 def get_latest_file(folder_path):
     folder = Path(folder_path)
-    files = list(folder.glob('*.xlsx'))  # .xlsx 파일만 찾기
+    files = list(folder.glob('*.xlsx'))
     st.write(f"Found files: {files}")  # 디버깅 메시지
-    return files
+    if not files:
+        return None
+    latest_file = max(files, key=os.path.getctime)
+    st.write(f"Latest file: {latest_file}")  # 디버깅 메시지
+    return latest_file
 
 # In[6]:
 
