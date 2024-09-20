@@ -48,22 +48,22 @@ def visualize_data(df):
 
     with col2:
         st.subheader("불량 부품 별 상위 10개 항목 분포 (Lineplot)")
-    
+        
         # 상위 10개 부품 선택
         top_10_parts = df['구분2'].value_counts().nlargest(10).index
         filtered_df = df[df['구분2'].isin(top_10_parts)]
-    
+        
         # 발생월과 구분2로 그룹화하여 건수 계산
         count_df = filtered_df.groupby(['발생월', '구분2']).size().reset_index(name='Count')
-
+    
         fig, ax = plt.subplots(figsize=(10, 5))
-    
-        # 각 발생월에 대한 라인 플롯 그리기
-        sns.lineplot(data=count_df, x='구분2', y='Count', hue='발생월', marker='o', ax=ax)
-    
+        
+        # 발생월을 x축으로, 각 구분2에 대해 라인 플롯 그리기
+        sns.lineplot(data=count_df, x='발생월', y='Count', hue='구분2', marker='o', ax=ax)
+        
         ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right', fontproperties=font_prop)
-        ax.set_title('불량 부품 별 상위 10개 항목 분포', fontsize=16, fontproperties=font_prop)
-        ax.set_xlabel('불량 부품', fontsize=14, fontproperties=font_prop)
+        ax.set_title('불량 부품 별 상위 10개 항목 월별 건수 분포', fontsize=16, fontproperties=font_prop)
+        ax.set_xlabel('발생월', fontsize=14, fontproperties=font_prop)
         ax.set_ylabel('건수', fontsize=14, fontproperties=font_prop)
         st.pyplot(fig)
 
