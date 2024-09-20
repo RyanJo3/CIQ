@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-
-
-
-
-
-
 # In[1]:
+
+
+get_ipython().system('pip install matplotlib.font_manager')
+get_ipython().system('pip install os')
+get_ipython().system('pip install pathlib')
+
+
+# In[2]:
 
 
 import pandas as pd
@@ -16,40 +18,55 @@ import matplotlib.pyplot as plt
 import streamlit as st
 import matplotlib.font_manager as fm
 import os
+from pathlib import Path
+
+
+# In[3]:
+
 
 def set_korean_font():
-    font_path = 'NanumGothic.ttf'
+    # 리포지토리 최상위 경로에 있는 폰트 파일 이름 지정
+    font_path = 'NanumGothic.ttf'  # NanumGothic.ttf 파일 이름
+    
+    # 폰트 파일이 존재하는지 확인하고 설정
     if os.path.exists(font_path):
         font_properties = fm.FontProperties(fname=font_path)
-        plt.rcParams['font.family'] = font_properties.get_name()
+        plt.rcParams['font.family'] = font_properties.get_name()  # matplotlib에 등록된 폰트 이름 사용
         print(f"'{font_properties.get_name()}' 폰트가 성공적으로 설정되었습니다.")
     else:
+        # 폰트 파일이 존재하지 않으면 기본 폰트로 설정
         plt.rcParams['font.family'] = 'Arial'
         print("폰트 파일을 찾을 수 없습니다. 기본 폰트로 설정합니다.")
+
+    # 마이너스 기호 깨짐 방지 설정
     plt.rcParams['axes.unicode_minus'] = False
 
+# 폰트 설정 호출
 set_korean_font()
 
-# 엑셀 파일 경로 지정
-file_path = "D:\\DX LV2\\CIQDASHBOARD.xlsx"
 
-# 데이터 불러오기
+# In[4]:
+
+
 def load_data(file_path):
-    try:
-        df = pd.read_excel(file_path)
-        if '구분2' in df.columns:
-            df['구분2'] = df['구분2'].fillna('제안')
-        return df
-    except Exception as e:
-        st.write(f"파일을 불러오는 중 오류가 발생했습니다: {e}")
-        return None
+    df = pd.read_excel(file_path)
 
-# 데이터 시각화
+    # 결측치 처리: 불량 부품 열의 결측치를 '제안'으로 대체
+    if '구분2' in df.columns:
+        df['구분2'] = df['구분2'].fillna('제안')
+    
+    return df
+
+
+# In[5]:
+
+
 def visualize_data(df):
     st.title("CIQ 데이터 시각화 대시보드")
 
     col1, col2 = st.columns(2)
     
+    # 첫 번째 그래프: 발생월 별 불량 유형 분포 (boxplot)
     with col1:
         st.subheader("발생월 별 불량 유형 분포 (Boxplot)")
         fig, ax = plt.subplots(figsize=(10, 5))
@@ -59,6 +76,7 @@ def visualize_data(df):
         ax.set_ylabel('보고 구분', fontsize=14)
         st.pyplot(fig)
 
+    # 두 번째 그래프: 불량 부품 별 상위 10개 항목 분포 (barplot)
     with col2:
         st.subheader("불량 부품 별 상위 10개 항목 분포 (Barplot)")
         top_10_parts = df['구분2'].value_counts().nlargest(10).index
@@ -71,6 +89,7 @@ def visualize_data(df):
         ax.set_ylabel('비율 (%)', fontsize=14)
         st.pyplot(fig)
 
+    # 세 번째 줄: 불량 유형 별 제품군 분포 (heatmap)
     with st.container():
         st.subheader("불량 유형 별 제품군 분포 (Heatmap)")
         if '보고 구분' in df.columns and 'E:P' in df.columns:
@@ -84,6 +103,7 @@ def visualize_data(df):
         else:
             st.write("열 '보고 구분' 또는 'E:P'이 데이터에 없습니다.")
 
+    # 네 번째 줄: 담당팀 별 불량 유형 (heatmap)
     with st.container():
         st.subheader("담당팀 별 불량 유형 분포 (Heatmap)")
         if '담당팀' in df.columns and '보고 구분' in df.columns:
@@ -97,20 +117,47 @@ def visualize_data(df):
         else:
             st.write("열 '담당팀' 또는 '보고 구분'이 데이터에 없습니다.")
 
-# Streamlit 앱 메인 함수
+
+# In[6]:
+
+
+def get_latest_file(folder_path):
+    folder = Path(folder_path)
+    files = list(folder.glob('*.xlsx'))
+    if not files:
+        return None
+    latest_file = max(files, key=os.path.getctime)
+    return latest_file
+
+
+# In[7]:
+
+
 def main():
     st.sidebar.title("엑셀 파일 자동 로드")
-    st.write(f"파일 경로: {file_path}")  # 파일 경로 출력
-    if os.path.exists(file_path):
-        st.write("파일이 존재합니다.")
-        df = load_data(file_path)
-        if df is not None:
+    folder_path = st.sidebar.text_input("폴더 경로를 입력하세요", value="data")
+
+    if folder_path:
+        latest_file = get_latest_file(folder_path)
+        if latest_file:
+            df = load_data(latest_file)
             st.write("데이터 프레임 미리보기", df.head())
             visualize_data(df)
         else:
-            st.write("데이터를 불러오는 중 오류가 발생했습니다.")
+            st.write("폴더에 엑셀 파일이 없습니다.")
     else:
-        st.write("지정된 경로에 엑셀 파일이 없습니다.")
+        st.write("폴더 경로를 입력하세요.")
+
+
+# In[8]:
+
 
 if __name__ == '__main__':
     main()
+
+
+# In[ ]:
+
+
+
+
