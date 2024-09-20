@@ -121,6 +121,8 @@ def visualize_data(df):
 
 def get_latest_file(folder_path):
     folder = Path(folder_path)
+    st.write(f"Current working directory: {os.getcwd()}")  # 현재 작업 디렉토리 출력
+    st.write(f"Folder path: {folder_path}")  # 입력된 폴더 경로 출력
     files = list(folder.glob('*.xlsx'))
     st.write(f"Found files: {files}")  # 디버깅 메시지
     if not files:
@@ -128,9 +130,6 @@ def get_latest_file(folder_path):
     latest_file = max(files, key=os.path.getctime)
     st.write(f"Latest file: {latest_file}")  # 디버깅 메시지
     return latest_file
-
-# In[6]:
-
 
 def main():
     st.sidebar.title("엑셀 파일 자동 로드")
@@ -147,16 +146,5 @@ def main():
     else:
         st.write("폴더 경로를 입력하세요.")
 
-
-# In[7]:
-
-
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
-
