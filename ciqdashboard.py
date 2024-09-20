@@ -119,7 +119,7 @@ def visualize_data(df):
 # In[5]:
 
 
-def get_all_excel_files(folder_path):
+def get_latest_file(folder_path):
     folder = Path(folder_path)
     files = list(folder.glob('*.xlsx'))  # .xlsx 파일만 찾기
     st.write(f"Found files: {files}")  # 디버깅 메시지
