@@ -55,7 +55,39 @@ def visualize_data(df):
         ax.set_xlabel('발생월', fontsize=14, fontproperties=font_prop)
         ax.set_ylabel('보고 구분', fontsize=14, fontproperties=font_prop)
         st.pyplot(fig)
+    with col2:
+        st.subheader("불량 부품 별 상위 10개 항목 월별 건수 분포 (Lineplot)")
+        top_10_parts = df['구분2'].value_counts().nlargest(10).index
+        filtered_df = df[df['구분2'].isin(top_10_parts)]
+    
+        if filtered_df.empty:
+            st.warning("상위 10개 부품 데이터가 없습니다.")
+            return
+    
+        # '발생월'에서 '월' 문자열 제거 후 숫자형으로 변환
+        filtered_df['발생월'] = filtered_df['발생월'].str.replace('월', '').astype(int)
+        count_df = filtered_df.groupby(['구분2', '발생월']).size().reset_index(name='Count')
+    
+        if count_df.empty:
+            st.warning("건수 데이터가 없습니다.")
+            return
 
+        fig, ax = plt.subplots(figsize=(10, 5))
+    
+        # 구분2를 x축으로, 발생월을 hue로 사용하여 라인 플롯 그리기
+        sns.lineplot(data=count_df, x='구분2', y='Count', hue='발생월', marker='o', ax=ax)
+
+        # 각 포인트에 건수 레이블 추가
+        for i in range(len(count_df)):
+            ax.text(count_df['구분2'].iloc[i], count_df['Count'].iloc[i], 
+                    str(count_df['Count'].iloc[i]), 
+                    color='black', fontsize=10, 
+                    ha='center', va='bottom')
+
+        ax.set_title('불량 부품 별 상위 10개 항목 월별 건수 분포', fontsize=16, fontproperties=font_prop)
+        ax.set_xlabel('불량 부품', fontsize=14, fontproperties=font_prop)
+        ax.set_ylabel('건수', fontsize=14, fontproperties=font_prop)
+        st.pyplot(fig)
     with col2:
         st.subheader("불량 부품 별 상위 10개 항목 분포 (Lineplot)")
         top_10_parts = df['구분2'].value_counts().nlargest(10).index
