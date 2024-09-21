@@ -30,6 +30,7 @@ else:
         data['구분2'].fillna('제안', inplace=True)
         data['구분3'].fillna('제안', inplace=True)
         data['E:P'] = data['E:P'].str[4:]
+        data = data[data['보고 구분'] != '열교환기']
         # Streamlit 대시보드 시작
         st.title("CIQ 데이터 대시보드")
 
