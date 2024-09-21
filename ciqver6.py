@@ -41,7 +41,7 @@ else:
         with col1:
             st.subheader("월별 품질정보 등록 비율")
             fig1, ax1 = plt.subplots(figsize=(12,12))
-            data['발생월'].value_counts().plot.pie(autopct='%1.1f%%', startangle=90, ax=ax1)
+            data['발생월'].value_counts().plot.pie(autopct='%1.1f%%', startangle=90, ax=ax1, fontsize=14)
             ax1.set_ylabel('')
             st.pyplot(fig1)
 
@@ -49,7 +49,7 @@ else:
         with col2:
             st.subheader("불량 유형 비율")
             fig5, ax5 = plt.subplots(figsize=(12,12))
-            data['보고 구분'].value_counts().plot.pie(autopct='%1.1f%%', startangle=90, ax=ax5)
+            data['보고 구분'].value_counts().plot.pie(autopct='%1.1f%%', startangle=90, ax=ax5, fontsize=14)
             ax5.set_ylabel('')
             st.pyplot(fig5)
             
