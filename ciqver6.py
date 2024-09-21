@@ -54,17 +54,20 @@ else:
     
             # explode를 사용하여 각 조각을 띄움
             explode = [0.1] * len(counts)  # 모든 조각을 0.1만큼 띄움
-    
-            wedges, texts, autotexts = counts.plot.pie(
-                autopct=None,  # 자동 퍼센트 레이블 숨김
-                startangle=90,
-                ax=ax5,
+
+            # 원형 그래프 그리기
+            patches, texts, autotexts = ax5.pie(
+                counts,
                 explode=explode,
-                fontsize=12
+                labels=None,  # 레이블 숨김
+                autopct='%1.1f%%',
+                startangle=90,
+                colors=sns.color_palette("husl", len(counts)),  # 색상 설정
+                textprops=dict(color="w"),
             )
-    
+
             # 별도의 범례 추가
-            ax5.legend(wedges, counts.index, title="보고 구분", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
+            ax5.legend(patches, counts.index, title="보고 구분", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
 
             ax5.set_ylabel('')
 
