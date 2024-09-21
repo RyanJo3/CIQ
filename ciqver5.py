@@ -4,17 +4,14 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib import font_manager, rc
 
-# 한글 폰트 설정 (NanumGothic.ttf가 동일 레퍼지토리에 있다고 가정)
-font_path = 'NanumGothic.ttf'  # 폰트 파일 경로
-fontprop = font_manager.FontProperties(fname=font_path)
+
 
 # matplotlib 기본 폰트 설정
-plt.rcParams['font.family'] = fontprop.get_name()
+plt.rcParams['font.family'] = 'Malgun Gothic'  # 또는 'Gulim', 'Noto Sans Korean' 등
 plt.rcParams['axes.unicode_minus'] = False  # 한글 폰트 사용 시 마이너스 기호 깨짐 방지
 
 # seaborn에서 한글 폰트 적용
-sns.set(font=fontprop.get_name())
-
+sns.set(font='Malgun Gothic')  # 시스템 폰트로 변경
 
 # CSV 파일 로드
 file_path = 'dashboard.csv'  # 자신의 파일 경로로 변경 필요
