@@ -15,8 +15,6 @@ plt.rcParams['axes.unicode_minus'] = False  # 한글 폰트 사용 시 마이너
 # seaborn에서 한글 폰트 적용
 sns.set(font=fontprop.get_name())
 
-# Streamlit 글꼴을 명확하게 적용
-st.set_option('deprecation.showPyplotGlobalUse', False)
 
 # CSV 파일 로드
 file_path = '/mnt/data/dashboard.csv'  # 자신의 파일 경로로 변경 필요
