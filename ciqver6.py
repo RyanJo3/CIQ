@@ -40,7 +40,7 @@ else:
         # 1번 그래프: '발생월'에 따른 원형 그래프
         with col1:
             st.subheader("월별 품질정보 등록 비율")
-            fig1, ax1 = plt.subplots()
+            fig1, ax1 = plt.subplots(figsize=(12,12)
             data['발생월'].value_counts().plot.pie(autopct='%1.1f%%', startangle=90, ax=ax1)
             ax1.set_ylabel('')
             st.pyplot(fig1)
@@ -48,7 +48,7 @@ else:
         # 5번 그래프: '보고 구분'에 따른 원형 그래프
         with col2:
             st.subheader("불량 유형 비율")
-            fig5, ax5 = plt.subplots()
+            fig5, ax5 = plt.subplots(figsize=(12,12)
             data['보고 구분'].value_counts().plot.pie(autopct='%1.1f%%', startangle=90, ax=ax5)
             ax5.set_ylabel('')
             st.pyplot(fig5)
