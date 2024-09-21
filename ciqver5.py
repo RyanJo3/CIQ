@@ -5,11 +5,11 @@ import seaborn as sns
 
 
 # 시스템 폰트 설정 (Windows에서는 'Malgun Gothic', macOS에서는 'AppleGothic', Linux에서는 'Noto Sans CJK' 권장)
-plt.rcParams['font.family'] = 'gulim'  # 또는 'AppleGothic', 'Noto Sans CJK' 등
+plt.rcParams['font.family'] = 'H2HDRM'  # 또는 'AppleGothic', 'Noto Sans CJK' 등
 plt.rcParams['axes.unicode_minus'] = False  # 마이너스 기호 깨짐 방지
 
 # seaborn에서 한글 폰트 적용
-sns.set(font='gulim')  # 시스템 폰트로 변경
+sns.set(font='H2HDRM')  # 시스템 폰트로 변경
 
 
 
