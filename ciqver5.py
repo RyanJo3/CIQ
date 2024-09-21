@@ -4,11 +4,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # 시스템 폰트 설정 (Windows에서는 'Malgun Gothic', macOS에서는 'AppleGothic', Linux에서는 'Noto Sans CJK' 권장)
-plt.rcParams['font.family'] = 'Malgun Gothic'  # 또는 'AppleGothic', 'Noto Sans CJK' 등
+plt.rcParams['font.family'] = '굴림 보통'  # 또는 'AppleGothic', 'Noto Sans CJK' 등
 plt.rcParams['axes.unicode_minus'] = False  # 마이너스 기호 깨짐 방지
 
 # seaborn에서 한글 폰트 적용
-sns.set(font='Malgun Gothic')  # 시스템 폰트로 변경
+sns.set(font='굴림 보통')  # 시스템 폰트로 변경
 
 # CSV 파일 로드
 file_path = 'dashboard.csv'  # 자신의 파일 경로로 변경 필요
