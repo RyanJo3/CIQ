@@ -29,7 +29,7 @@ else:
         # 데이터 전처리: '구분2'와 '구분3'의 결측값을 '제안'으로 대체
         data['구분2'].fillna('제안', inplace=True)
         data['구분3'].fillna('제안', inplace=True)
-
+        data['E:P'] = data['E:P'].str[4:]
         # Streamlit 대시보드 시작
         st.title("CIQ 데이터 대시보드")
 
