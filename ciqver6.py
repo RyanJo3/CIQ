@@ -58,7 +58,7 @@ else:
         fig2, ax2 = plt.subplots(figsize=(19, 9))  # 그래프 크기를 확대
         sns.countplot(data=data, x='발생월', hue='보고 구분', ax=ax2)
         ax2.set_title('월별 이슈 발생 빈도')  # fontproperties 제거
-        ax2.legend(loc='upper right', bbox_to_anchor=(1.15, 1))  # 범례를 그래프 바깥으로 이동
+        ax2.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), ncol=3)  # 범례를 그래프 바깥으로 이동
         st.pyplot(fig2)
 
         # 3번 그래프: '구분2' 상위 5개 항목과 구분3 상위 3개 데이터
@@ -74,7 +74,7 @@ else:
         fig3, ax3 = plt.subplots(figsize=(19, 9))  # 그래프 크기 확대
         sns.barplot(data=filtered_data, x='구분2', y='건수', hue='구분3', ax=ax3)
         ax3.set_title('불량 부품 TOP 5 상세 불량 현황')  # fontproperties 제거
-        ax3.legend(loc='upper right', bbox_to_anchor=(1.15, 1))  # 범례를 그래프 바깥으로 이동
+        ax3.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), ncol=3)  # 범례를 그래프 바깥으로 이동
         st.pyplot(fig3)
 
         # 4번 그래프: '발생월'과 'E:P'에 따른 제품군 빈도 그래프
