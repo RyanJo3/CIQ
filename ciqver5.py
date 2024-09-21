@@ -15,7 +15,7 @@ sns.set(font='H2HDRM')  # 시스템 폰트로 변경
 
 # CSV 파일 로드
 file_path = 'dashboard.csv'  # 자신의 파일 경로로 변경 필요
-data = pd.read_csv(file_path, dtype = 'str')
+data = pd.read_csv(file_path, encoding="utf-8")
 
 # 데이터 전처리: '구분2'와 '구분3'의 결측값을 '제안'으로 대체
 data['구분2'].fillna('제안', inplace=True)
