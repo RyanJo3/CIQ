@@ -5,7 +5,7 @@ import seaborn as sns
 from matplotlib import font_manager, rc
 
 # 한글 폰트 설정 (NanumGothic.ttf가 동일 레퍼지토리에 있다고 가정)
-font_path = './NanumGothic.ttf'  # 폰트 파일 경로
+font_path = 'NanumGothic.ttf'  # 폰트 파일 경로
 fontprop = font_manager.FontProperties(fname=font_path)
 
 # matplotlib 기본 폰트 설정
@@ -17,7 +17,7 @@ sns.set(font=fontprop.get_name())
 
 
 # CSV 파일 로드
-file_path = '/mnt/data/dashboard.csv'  # 자신의 파일 경로로 변경 필요
+file_path = 'dashboard.csv'  # 자신의 파일 경로로 변경 필요
 data = pd.read_csv(file_path)
 
 # 데이터 전처리: '구분2'와 '구분3'의 결측값을 '제안'으로 대체
