@@ -10,14 +10,11 @@ font_path = os.path.join(os.getcwd(), 'NanumGothic.ttf')
 if not os.path.exists(font_path):
     st.error(f"폰트 파일을 찾을 수 없습니다. 현재 경로에 'NanumGothic.ttf' 파일이 있는지 확인하세요.")
 else:
-    # 2. 폰트 캐시 초기화 및 추가
-    
+    # 2. 폰트 추가
     fm.fontManager.addfont(font_path)
+    font_prop = fm.FontProperties(fname=font_path)  # 폰트 속성 정의
     plt.rc('font', family='NanumGothic')  # matplotlib에 폰트 설정
     sns.set(font='NanumGothic')  # seaborn에 폰트 설정
-
-    # 3. 설정된 폰트 확인
-    st.write(f"설정된 폰트: {fm.FontProperties(fname=font_path).get_name()}")
 
     # 3. 설정된 폰트 확인
     st.write(f"설정된 폰트: {font_prop.get_name()}")
