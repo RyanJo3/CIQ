@@ -38,7 +38,7 @@ else:
 
         # 1번 그래프: '발생월'에 따른 원형 그래프
         with col1:
-            st.subheader("1. 월별 현황 비율 (발생월)")
+            st.subheader("월별 품질정보 등록 비율")
             fig1, ax1 = plt.subplots()
             data['발생월'].value_counts().plot.pie(autopct='%1.1f%%', startangle=90, ax=ax1)
             ax1.set_ylabel('')
@@ -46,14 +46,14 @@ else:
 
         # 5번 그래프: '보고 구분'에 따른 원형 그래프
         with col2:
-            st.subheader("5. 보고 구분 비율")
-            fig5, ax5 = plt.subplots()
-            data['보고 구분'].value_counts().plot.pie(autopct='%1.1f%%', startangle=90, ax=ax5)
+            st.subheader("불량 유형 비율")
+            fig5, ax5 = plt.subplots(figsize=(8, 8))  # 그래프 크기 조정 (가로, 세로)
+            data['보고 구분'].value_counts().plot.pie(autopct='%1.1f%%', startangle=90, ax=ax5, fontsize=12)  # 글씨 크기 조정
             ax5.set_ylabel('')
             st.pyplot(fig5)
 
         # 2번 그래프: '발생월'과 '보고 구분'에 따른 이슈 발생 빈도 그래프
-        st.subheader("2. 월별 이슈 발생 빈도 (발생월 & 보고 구분)")
+        st.subheader(월별 이슈 발생 빈도")
         fig2, ax2 = plt.subplots(figsize=(19, 9))  # 그래프 크기를 확대
         sns.countplot(data=data, x='발생월', hue='보고 구분', ax=ax2)
         ax2.set_title('월별 이슈 발생 빈도')  # fontproperties 제거
@@ -61,7 +61,7 @@ else:
         st.pyplot(fig2)
 
         # 3번 그래프: '구분2' 상위 5개 항목과 구분3 상위 3개 데이터
-        st.subheader("3. 구분2 상위 5개 항목의 구분3 상위 3개 데이터 건수")
+        st.subheader("불량 부품 TOP 5 상세 불량 현황")
         top_5_gu2 = data['구분2'].value_counts().nlargest(5).index  # 구분2 상위 5개 항목
 
         filtered_data = pd.DataFrame()
@@ -72,12 +72,12 @@ else:
 
         fig3, ax3 = plt.subplots(figsize=(19, 9))  # 그래프 크기 확대
         sns.barplot(data=filtered_data, x='구분2', y='건수', hue='구분3', ax=ax3)
-        ax3.set_title('구분2 상위 5개 항목의 구분3 상위 3개 데이터 건수')  # fontproperties 제거
+        ax3.set_title('불량 부품 TOP 5 상세 불량 현황')  # fontproperties 제거
         ax3.legend(loc='upper right', bbox_to_anchor=(1.15, 1))  # 범례를 그래프 바깥으로 이동
         st.pyplot(fig3)
 
         # 4번 그래프: '발생월'과 'E:P'에 따른 제품군 빈도 그래프
-        st.subheader("4. 월별 제품군 빈도 (발생월 & E:P)")
+        st.subheader("월별 제품군 빈도")
         fig4, ax4 = plt.subplots(figsize=(19, 9))  # 그래프 크기를 확대
         sns.countplot(data=data, x='발생월', hue='E:P', ax=ax4)
         ax4.set_title('월별 제품군 빈도')  # fontproperties 제거
