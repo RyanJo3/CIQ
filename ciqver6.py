@@ -53,7 +53,7 @@ else:
             st.pyplot(fig5)
 
         # 2번 그래프: '발생월'과 '보고 구분'에 따른 이슈 발생 빈도 그래프
-        st.subheader(월별 이슈 발생 빈도")
+        st.subheader("월별 이슈 발생 빈도")
         fig2, ax2 = plt.subplots(figsize=(19, 9))  # 그래프 크기를 확대
         sns.countplot(data=data, x='발생월', hue='보고 구분', ax=ax2)
         ax2.set_title('월별 이슈 발생 빈도')  # fontproperties 제거
