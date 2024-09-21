@@ -53,7 +53,7 @@ else:
             counts = data['보고 구분'].value_counts()
     
             # explode를 사용하여 각 조각을 띄움
-            explode = [0.1] * len(counts)  # 모든 조각을 0.1만큼 띄움
+            explode = [0] * len(counts)  # 모든 조각을 0.1만큼 띄움
 
             # 원형 그래프 그리기
             patches, texts, autotexts = ax5.pie(
