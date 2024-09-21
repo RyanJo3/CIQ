@@ -7,11 +7,19 @@ from matplotlib import font_manager, rc
 # 한글 폰트 설정 (NanumGothic.ttf가 동일 레퍼지토리에 있다고 가정)
 font_path = './NanumGothic.ttf'  # 폰트 파일 경로
 fontprop = font_manager.FontProperties(fname=font_path)
-plt.rc('font', family=fontprop.get_name())  # matplotlib 폰트 설정
-rc('font', family=fontprop.get_name())  # seaborn 그래프에서도 한글 설정
+
+# matplotlib 기본 폰트 설정
+plt.rcParams['font.family'] = fontprop.get_name()
+plt.rcParams['axes.unicode_minus'] = False  # 한글 폰트 사용 시 마이너스 기호 깨짐 방지
+
+# seaborn에서 한글 폰트 적용
+sns.set(font=fontprop.get_name())
+
+# Streamlit 글꼴을 명확하게 적용
+st.set_option('deprecation.showPyplotGlobalUse', False)
 
 # CSV 파일 로드
-file_path = 'dashboard.csv'  # 자신의 파일 경로로 변경 필요
+file_path = '/mnt/data/dashboard.csv'  # 자신의 파일 경로로 변경 필요
 data = pd.read_csv(file_path)
 
 # 데이터 전처리: '구분2'와 '구분3'의 결측값을 '제안'으로 대체
@@ -19,7 +27,7 @@ data['구분2'].fillna('제안', inplace=True)
 data['구분3'].fillna('제안', inplace=True)
 
 # Streamlit 대시보드 시작
-st.title("CIQ 데이터 대시보드")
+st.title("CSV 데이터 대시보드")
 
 # 1층: 1번과 5번 그래프를 나란히 배치
 col1, col2 = st.columns(2)
@@ -48,18 +56,20 @@ ax2.set_title('월별 이슈 발생 빈도', fontproperties=fontprop)
 ax2.legend(loc='upper right', bbox_to_anchor=(1.15, 1))  # 범례를 그래프 바깥으로 이동
 st.pyplot(fig2)
 
-# 3번 그래프: '구분2' 상위 5개 항목에 대한 '구분3' 데이터 건수
-st.subheader("3. 구분2 상위 5개 항목의 구분3 데이터 건수")
+# 3번 그래프: '구분2' 상위 5개 항목과 구분3 상위 3개 데이터
+st.subheader("3. 구분2 상위 5개 항목의 구분3 상위 3개 데이터 건수")
 top_5_gu2 = data['구분2'].value_counts().nlargest(5).index  # 구분2 상위 5개 항목
-top_5_data = data[data['구분2'].isin(top_5_gu2)]  # 상위 5개 구분2에 해당하는 행만 추출
 
-# 구분3 상위 항목 필터링
-top_5_gu3 = top_5_data['구분3'].value_counts().nlargest(5).index  # 구분3 상위 5개 항목
-filtered_data = top_5_data[top_5_data['구분3'].isin(top_5_gu3)]  # 구분3 상위 5개에 해당하는 데이터 필터링
+# 각 구분2 항목에 대해 구분3 열의 상위 3개 항목을 추출
+filtered_data = pd.DataFrame()
+for gu2 in top_5_gu2:
+    gu3_counts = data[data['구분2'] == gu2]['구분3'].value_counts().nlargest(3)
+    gu3_data = pd.DataFrame({'구분2': gu2, '구분3': gu3_counts.index, '건수': gu3_counts.values})
+    filtered_data = pd.concat([filtered_data, gu3_data], axis=0)
 
 fig3, ax3 = plt.subplots(figsize=(12, 6))  # 그래프 크기 확대
-sns.countplot(data=filtered_data, x='구분2', hue='구분3', ax=ax3)
-ax3.set_title('구분2 상위 5개 항목의 구분3 데이터 건수', fontproperties=fontprop)
+sns.barplot(data=filtered_data, x='구분2', y='건수', hue='구분3', ax=ax3)
+ax3.set_title('구분2 상위 5개 항목의 구분3 상위 3개 데이터 건수', fontproperties=fontprop)
 ax3.legend(loc='upper right', bbox_to_anchor=(1.15, 1))  # 범례를 그래프 바깥으로 이동
 st.pyplot(fig3)
 
