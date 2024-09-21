@@ -47,9 +47,29 @@ else:
         # 5번 그래프: '보고 구분'에 따른 원형 그래프
         with col2:
             st.subheader("불량 유형 비율")
-            fig5, ax5 = plt.subplots(figsize=(8, 8))  # 그래프 크기 조정 (가로, 세로)
-            data['보고 구분'].value_counts().plot.pie(autopct='%1.1f%%', startangle=90, ax=ax5, fontsize=12)  # 글씨 크기 조정
+            fig5, ax5 = plt.subplots(figsize=(10, 10))  # 그래프 크기 조정 (가로, 세로)
+    
+            # 데이터 준비
+            counts = data['보고 구분'].value_counts()
+    
+            # explode를 사용하여 각 조각을 띄움
+            explode = [0.1] * len(counts)  # 모든 조각을 0.1만큼 띄움
+    
+            wedges, texts, autotexts = counts.plot.pie(
+                autopct=None,  # 자동 퍼센트 레이블 숨김
+                startangle=90,
+                ax=ax5,
+                explode=explode,
+                fontsize=12
+            )
+    
+            # 별도의 범례 추가
+            ax5.legend(wedges, counts.index, title="보고 구분", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
+
             ax5.set_ylabel('')
+
+            # 레이블 겹침을 줄이기 위해 축의 비율을 조정
+            ax5.axis('equal')  # 원형으로 보이게 조정
             st.pyplot(fig5)
 
         # 2번 그래프: '발생월'과 '보고 구분'에 따른 이슈 발생 빈도 그래프
