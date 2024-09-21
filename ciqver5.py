@@ -47,7 +47,7 @@ with col2:
 st.subheader("2. 월별 이슈 발생 빈도 (발생월 & 보고 구분)")
 fig2, ax2 = plt.subplots(figsize=(19, 9))  # 그래프 크기를 확대
 sns.countplot(data=data, x='발생월', hue='보고 구분', ax=ax2)
-ax2.set_title('월별 이슈 발생 빈도', fontproperties=fontprop)
+ax2.set_title('월별 이슈 발생 빈도')
 ax2.legend(loc='upper right', bbox_to_anchor=(1.15, 1))  # 범례를 그래프 바깥으로 이동
 st.pyplot(fig2)
 
@@ -64,7 +64,7 @@ for gu2 in top_5_gu2:
 
 fig3, ax3 = plt.subplots(figsize=(19, 9))  # 그래프 크기 확대
 sns.barplot(data=filtered_data, x='구분2', y='건수', hue='구분3', ax=ax3)
-ax3.set_title('구분2 상위 5개 항목의 구분3 상위 3개 데이터 건수', fontproperties=fontprop)
+ax3.set_title('구분2 상위 5개 항목의 구분3 상위 3개 데이터 건수')
 ax3.legend(loc='upper right', bbox_to_anchor=(1.15, 1))  # 범례를 그래프 바깥으로 이동
 st.pyplot(fig3)
 
@@ -72,6 +72,6 @@ st.pyplot(fig3)
 st.subheader("4. 월별 제품군 빈도 (발생월 & E:P)")
 fig4, ax4 = plt.subplots(figsize=(19, 9))  # 그래프 크기를 확대
 sns.countplot(data=data, x='발생월', hue='E:P', ax=ax4)
-ax4.set_title('월별 제품군 빈도', fontproperties=fontprop)
+ax4.set_title('월별 제품군 빈도')
 ax4.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), ncol=3)  # 범례를 그래프 바깥으로 이동하고 가로로 배치
 st.pyplot(fig4)
