@@ -60,7 +60,7 @@ else:
         ax2.set_title('월별 이슈 발생 빈도')  # fontproperties 제거
         ax2.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), ncol=3)  # 범례를 그래프 바깥으로 이동
         for p in ax2.patches:
-            ax2.annotate(f'{p.get_height()}', (p.get_x() + p.get_width() / 2., p.get_height()), ha='center', va='center', xytext=(0, 10), textcoords='offset points')
+            ax2.annotate(f'{p.get_height():.0f}', (p.get_x() + p.get_width() / 2., p.get_height()), ha='center', va='center', xytext=(0, 10), textcoords='offset points')
         st.pyplot(fig2)
 
         # 3번 그래프: '구분2' 상위 5개 항목과 구분3 상위 3개 데이터
@@ -78,7 +78,7 @@ else:
         ax3.set_title('불량 부품 TOP 5 상세 불량 현황')  # fontproperties 제거
         ax3.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), ncol=3)  # 범례를 그래프 바깥으로 이동
         for p in ax3.patches:
-            ax3.annotate(f'{p.get_height()}', (p.get_x() + p.get_width() / 2., p.get_height()), ha='center', va='center', xytext=(0, 10), textcoords='offset points')
+            ax3.annotate(f'{p.get_height():.0f}', (p.get_x() + p.get_width() / 2., p.get_height()), ha='center', va='center', xytext=(0, 10), textcoords='offset points')
         st.pyplot(fig3)
 
         # 4번 그래프: '발생월'과 'E:P'에 따른 제품군 빈도 그래프
@@ -88,5 +88,5 @@ else:
         ax4.set_title('월별 제품군 빈도')  # fontproperties 제거
         ax4.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), ncol=3)  # 범례를 그래프 바깥으로 이동하고 가로로 배치
         for p in ax4.patches:
-            ax4.annotate(f'{p.get_height()}', (p.get_x() + p.get_width() / 2., p.get_height()), ha='center', va='center', xytext=(0, 10), textcoords='offset points')
+            ax4.annotate(f'{p.get_height():.0f}', (p.get_x() + p.get_width() / 2., p.get_height()), ha='center', va='center', xytext=(0, 10), textcoords='offset points')
         st.pyplot(fig4)
