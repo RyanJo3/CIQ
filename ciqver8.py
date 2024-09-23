@@ -26,6 +26,7 @@ else:
 
         # 1번 그래프: '발생월'에 따른 원형 그래프
         st.subheader("월별 품질정보 등록 비율")
+        data['발생월'] = pd.Categorical(data['발생월'], categories=[f"{i}월" for i in range(1, 13)], ordered=True)
         fig1 = px.pie(data, names='발생월', title='월별 품질정보 등록 비율')
         fig1.update_layout(font=dict(family="NanumGothic", size=18))
         st.plotly_chart(fig1)
@@ -42,7 +43,7 @@ else:
         fig2.update_layout(font=dict(family="NanumGothic", size=18))
         st.plotly_chart(fig2)
 
-        # 3번 그래프: '구분2' 상위 5개 항목과 구분3 상위 3개 데이터
+        # 4번 그래프: '구분2' 상위 5개 항목과 구분3 상위 3개 데이터
         st.subheader("불량 부품 TOP 5 상세 불량 현황")
         top_5_gu2 = data['구분2'].value_counts().nlargest(5).index  # 구분2 상위 5개 항목
 
@@ -52,11 +53,11 @@ else:
             gu3_data = pd.DataFrame({'구분2': gu2, '구분3': gu3_counts.index, '건수': gu3_counts.values})
             filtered_data = pd.concat([filtered_data, gu3_data], axis=0)
 
-        fig3 = px.bar(filtered_data, x='구분2', y='건수', color='구분3', title='불량 부품 TOP 5 상세 불량 현황', barmode='group')
+        fig3 = px.bar(filtered_data, x='불량 부품', y='count', color='구분3', title='불량 부품 TOP 5 상세 불량 현황', barmode='group')
         fig3.update_layout(font=dict(family="NanumGothic", size=18))
         st.plotly_chart(fig3)
 
-        # 4번 그래프: '발생월'과 'E:P'에 따른 제품군 빈도 그래프
+        # 5번 그래프: '발생월'과 'E:P'에 따른 제품군 빈도 그래프
         st.subheader("월별 제품군 빈도")
         fig4 = px.histogram(data, x='발생월', color='E:P', barmode='group', title='월별 제품군 빈도')
         fig4.update_layout(font=dict(family="NanumGothic", size=18))
