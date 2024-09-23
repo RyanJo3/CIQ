@@ -27,10 +27,12 @@ else:
         # 색상 팔레트 설정
         color_palette = px.colors.qualitative.Plotly
 
-        # 1번 그래프: '발생월'에 따른 원형 그래프
+         # 1번 그래프: '발생월'에 따른 원형 그래프
         st.subheader("월별 품질정보 등록 비율")
+        # '발생월'을 1월부터 12월까지 순서대로 정렬
         data['발생월'] = pd.Categorical(data['발생월'], categories=[f"{i}월" for i in range(1, 13)], ordered=True)
-        fig1 = px.pie(data, names='발생월', title='월별 품질정보 등록 비율')
+        fig1 = px.pie(data, names='발생월', title='월별 품질정보 등록 비율', color_discrete_sequence=color_palette,
+                      category_orders={'발생월': [f"{i}월" for i in range(1, 13)]})
         fig1.update_layout(font=dict(family="NanumGothic", size=18))
         st.plotly_chart(fig1)
 
