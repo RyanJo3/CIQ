@@ -24,6 +24,9 @@ else:
         # Streamlit 대시보드 시작
         st.title("CIQ 데이터 대시보드")
 
+        # 색상 팔레트 설정
+        color_palette = px.colors.qualitative.Plotly
+
         # 1번 그래프: '발생월'에 따른 원형 그래프
         st.subheader("월별 품질정보 등록 비율")
         data['발생월'] = pd.Categorical(data['발생월'], categories=[f"{i}월" for i in range(1, 13)], ordered=True)
