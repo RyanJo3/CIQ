@@ -1,113 +1,69 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
 import streamlit as st
-import matplotlib.font_manager as fm
+import pandas as pd
+import plotly.express as px
 import os
 
-def set_korean_font():
-    # 리포지토리 최상위 경로에 있는 폰트 파일 이름 지정
-    font_path = 'NanumGothic.ttf'  # NanumGothic.ttf 파일 이름
-    
-    # 폰트 파일이 존재하는지 확인하고 설정
-    if os.path.exists(font_path):
-        font_properties = fm.FontProperties(fname=font_path)
-        plt.rcParams['font.family'] = font_properties.get_name()  # matplotlib에 등록된 폰트 이름 사용
-        print(f"'{font_properties.get_name()}' 폰트가 성공적으로 설정되었습니다.")
+# 1. 폰트 파일 경로 설정
+font_path = os.path.join(os.getcwd(), 'NanumGothic.ttf')
+if not os.path.exists(font_path):
+    st.error(f"폰트 파일을 찾을 수 없습니다. 현재 경로에 'NanumGothic.ttf' 파일이 있는지 확인하세요.")
+else:
+    # CSV 파일 로드
+    file_path = 'dashboard.csv'  # 자신의 파일 경로로 변경 필요
+    try:
+        data = pd.read_csv(file_path, encoding="utf-8")
+    except FileNotFoundError:
+        st.error(f"CSV 파일을 찾을 수 없습니다. '{file_path}' 파일 경로를 확인하세요.")
     else:
-        # 폰트 파일이 존재하지 않으면 기본 폰트로 설정
-        plt.rcParams['font.family'] = 'Arial'
-        print("폰트 파일을 찾을 수 없습니다. 기본 폰트로 설정합니다.")
+        # 데이터 전처리: '구분2'와 '구분3'의 결측값을 '제안'으로 대체
+        data['구분2'].fillna('제안', inplace=True)
+        data['구분3'].fillna('제안', inplace=True)
+        data['E:P'] = data['E:P'].str[4:]
+        data = data[data['E:P'] != '타']
+        data = data[data['보고 구분'] != '열교환기']
+        # Streamlit 대시보드 시작
+        st.title("CIQ 데이터 대시보드")
 
-    # 마이너스 기호 깨짐 방지 설정
-    plt.rcParams['axes.unicode_minus'] = False
+        # 색상 팔레트 설정
+        color_palette = px.colors.qualitative.Plotly
 
-# 폰트 설정 호출
-set_korean_font()
+         # 1번 그래프: '발생월'에 따른 원형 그래프
+        st.subheader("월별 품질정보 등록 비율")
+        # '발생월'을 1월부터 12월까지 순서대로 정렬
+        data['발생월'] = pd.Categorical(data['발생월'], categories=[f"{i}월" for i in range(1, 13)], ordered=True)
+        fig1 = px.pie(data, names='발생월', title='월별 품질정보 등록 비율', color_discrete_sequence=color_palette,
+                      category_orders={'발생월': [f"{i}월" for i in range(1, 13)]})
+        fig1.update_layout(font=dict(family="NanumGothic", size=18))
+        st.plotly_chart(fig1)
 
+        # 2번 그래프: '보고 구분'에 따른 원형 그래프
+        st.subheader("불량 유형 비율")
+        fig5 = px.pie(data, names='보고 구분', title='불량 유형 비율')
+        fig5.update_layout(font=dict(family="NanumGothic", size=18))
+        st.plotly_chart(fig5)
+        
+        # 3번 그래프: '발생월'과 '보고 구분'에 따른 이슈 발생 빈도 그래프
+        st.subheader("월별 불량 유형별 발생 빈도")
+        fig2 = px.histogram(data, x='발생월', color='보고 구분', barmode='group', title='월별 불량 유형별 발생 빈도')
+        fig2.update_layout(font=dict(family="NanumGothic", size=18))
+        st.plotly_chart(fig2)
 
+        # 4번 그래프: '구분2' 상위 5개 항목과 구분3 상위 3개 데이터
+        st.subheader("불량 부품 TOP 5 상세 불량 현황")
+        top_5_gu2 = data['구분2'].value_counts().nlargest(5).index  # 구분2 상위 5개 항목
 
-def load_data(file_path):
-    df = pd.read_excel(file_path)
+        filtered_data = pd.DataFrame()
+        for gu2 in top_5_gu2:
+            gu3_counts = data[data['구분2'] == gu2]['구분3'].value_counts().nlargest(3)
+            gu3_data = pd.DataFrame({'불량 부품': gu2, '구분3': gu3_counts.index, 'count': gu3_counts.values})
+            filtered_data = pd.concat([filtered_data, gu3_data], axis=0)
 
-    # 결측치 처리: 불량 부품 열의 결측치를 '제안'으로 대체
-    if '구분2' in df.columns:
-        df['구분2'] = df['구분2'].fillna('제안')
-    
-    return df
+        fig3 = px.bar(filtered_data, x='불량 부품', y='count', color='구분3', title='불량 부품 TOP 5 상세 불량 현황', barmode='group')
+        fig3.update_layout(font=dict(family="NanumGothic", size=18))
+        st.plotly_chart(fig3)
 
-def visualize_data(df):
-    st.title("CIQ 데이터 시각화 대시보드")
-
-    col1,col2 =st.columns(2)
-    
-     # 첫 번째 그래프: 발생월 별 불량 유형 분포 (boxplot)
-    with col1:
-        st.subheader("발생월 별 불량 유형 분포 (Boxplot)")
-        fig, ax = plt.subplots(figsize=(10, 5))
-        sns.boxplot(data=df, x='발생월', y='보고 구분', palette='Set3', ax=ax)
-        ax.set_title('발생월 별 불량 유형 분포', fontsize=16)
-        ax.set_xlabel('발생월', fontsize=14)
-        ax.set_ylabel('보고 구분', fontsize=14)
-        st.pyplot(fig)
-
-    # 두 번째 그래프: 불량 부품 별 상위 10개 항목 분포 (barplot)
-    with col2:
-        st.subheader("불량 부품 별 상위 10개 항목 분포 (Barplot)")
-        top_10_parts = df['구분2'].value_counts().nlargest(10).index
-        filtered_df = df[df['구분2'].isin(top_10_parts)]
-        fig, ax = plt.subplots(figsize=(10, 5))
-        sns.barplot(data=filtered_df, x='구분2', y='발생월', estimator=lambda x: len(x) / len(filtered_df) * 100, palette='coolwarm', order=top_10_parts, ax=ax)
-        ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
-        ax.set_title('불량 부품 별 상위 10개 항목 분포', fontsize=16)
-        ax.set_xlabel('불량 부품', fontsize=14)
-        ax.set_ylabel('비율 (%)', fontsize=14)
-        st.pyplot(fig)
-
-    # 세 번째 줄: 불량 유형 별 제품군 분포 (heatmap)
-    with st.container():
-        st.subheader("불량 유형 별 제품군 분포 (Heatmap)")
-        if '보고 구분' in df.columns and 'E:P' in df.columns:
-            pivot_table = pd.crosstab(df['보고 구분'], df['E:P'])
-            fig, ax = plt.subplots(figsize=(12, 6))
-            sns.heatmap(pivot_table, annot=True, fmt="d", cmap="YlGnBu", linewidths=.5, ax=ax)
-            ax.set_title('불량 유형 별 제품군 분포', fontsize=16)
-            ax.set_xlabel('E:P', fontsize=14)
-            ax.set_ylabel('보고 구분', fontsize=14)
-            st.pyplot(fig)
-        else:
-            st.write("열 '보고 구분' 또는 'E:P'이 데이터에 없습니다.")
-
-    # 네 번째 줄: 담당팀 별 불량 유형 (heatmap)
-    with st.container():
-        st.subheader("담당팀 별 불량 유형 분포 (Heatmap)")
-        if '담당팀' in df.columns and '보고 구분' in df.columns:
-            pivot_table_team = pd.crosstab(df['담당팀'], df['보고 구분'])
-            fig, ax = plt.subplots(figsize=(12, 6))
-            sns.heatmap(pivot_table_team, annot=True, fmt="d", cmap="YlOrBr", linewidths=.5, ax=ax)
-            ax.set_title('담당팀 별 불량 유형 분포', fontsize=16)
-            ax.set_xlabel('보고 구분', fontsize=14)
-            ax.set_ylabel('담당팀', fontsize=14)
-            st.pyplot(fig)
-        else:
-            st.write("열 '담당팀' 또는 '보고 구분'이 데이터에 없습니다.")
-
-def main():
-    st.sidebar.title("엑셀 파일 업로드")
-    uploaded_file = st.sidebar.file_uploader("엑셀 파일을 선택하세요", type=["xlsx"])
-
-    if uploaded_file:
-        df = load_data(uploaded_file)
-        st.write("데이터 프레임 미리보기", df.head())
-        visualize_data(df)
-    else:
-        st.write("엑셀 파일을 업로드하세요.")
-
-if __name__ == '__main__':
-    main()
+        # 5번 그래프: '발생월'과 'E:P'에 따른 제품군 빈도 그래프
+        st.subheader("월별 제품군 빈도")
+        fig4 = px.histogram(data, x='발생월', color='E:P', barmode='group', title='월별 제품군 빈도')
+        fig4.update_layout(font=dict(family="NanumGothic", size=18))
+        st.plotly_chart(fig4)
