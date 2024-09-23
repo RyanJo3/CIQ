@@ -50,7 +50,7 @@ else:
         filtered_data = pd.DataFrame()
         for gu2 in top_5_gu2:
             gu3_counts = data[data['구분2'] == gu2]['구분3'].value_counts().nlargest(3)
-            gu3_data = pd.DataFrame({'구분2': gu2, '구분3': gu3_counts.index, '건수': gu3_counts.values})
+            gu3_data = pd.DataFrame({'불량 부품': gu2, '구분3': gu3_counts.index, 'count': gu3_counts.values})
             filtered_data = pd.concat([filtered_data, gu3_data], axis=0)
 
         fig3 = px.bar(filtered_data, x='불량 부품', y='count', color='구분3', title='불량 부품 TOP 5 상세 불량 현황', barmode='group')
