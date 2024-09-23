@@ -29,15 +29,15 @@ else:
         fig1.update_layout(font=dict(family="NanumGothic", size=18))
         st.plotly_chart(fig1)
 
-        # 5번 그래프: '보고 구분'에 따른 원형 그래프
+        # 2번 그래프: '보고 구분'에 따른 원형 그래프
         st.subheader("불량 유형 비율")
         fig5 = px.pie(data, names='보고 구분', title='불량 유형 비율')
         fig5.update_layout(font=dict(family="NanumGothic", size=18))
         st.plotly_chart(fig5)
         
-        # 2번 그래프: '발생월'과 '보고 구분'에 따른 이슈 발생 빈도 그래프
-        st.subheader("월별 이슈 발생 빈도")
-        fig2 = px.histogram(data, x='발생월', color='보고 구분', barmode='group', title='월별 이슈 발생 빈도')
+        # 3번 그래프: '발생월'과 '보고 구분'에 따른 이슈 발생 빈도 그래프
+        st.subheader("월별 불량 유형별 발생 빈도")
+        fig2 = px.histogram(data, x='발생월', color='보고 구분', barmode='group', title='월별 불량 유형별 발생 빈도')
         fig2.update_layout(font=dict(family="NanumGothic", size=18))
         st.plotly_chart(fig2)
 
